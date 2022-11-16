@@ -1,0 +1,48 @@
+<!-- Вход/выход -->
+{% if user.is_authenticated %}
+    <a href="/accounts/logout">Выход</a>
+    <a href="/cart">Корзина</a>
+{% else %}
+<a href="/accounts/login">Вход</a>
+
+{% endif %}
+<!--Курс валюты-->
+{{ rate }}
+
+<!-- Поле для поиска -->
+<form action="/search" method="post">
+    {% csrf_token %} <!-- Всегда если есть тег form -->
+    <input type="text" name="search">
+</form>
+<hr>
+
+<!-- Отображение товаров и их цен -->
+{% for product in products %}
+    <a href="/product/{{ product.product_name }}/{{ product.id }}">{{ product.product_name }}</a>
+
+    {{ product.product_price }}<br>
+{% endfor %}
+<hr>
+
+<!-- Отображение категорий -->
+{% for category in categories %}
+    {{ category.category_name }}
+    <a href="/category/{{ category.id }}">{{ category.category_name }}</a>
+{% endfor %}
+<hr>
+
+<!-- Отображение акций -->
+{% for sale in sales %}
+    {{ sale.sale_name }}
+    {{ sale.sale_start_date }}
+    {{ sale.sale_end_date }}
+{% endfor %}
+
+<hr>
+<!-- Отзывы -->
+<form method="post">
+    {% csrf_token %}
+    <input type="email" name="mail" value="{{ user.email }}"><br>
+    <textarea name="message" cols="30" rows="5" placeholder="Ваше сообщение"></textarea><br>
+    <button>Отправить отзыв</button>
+</form>
